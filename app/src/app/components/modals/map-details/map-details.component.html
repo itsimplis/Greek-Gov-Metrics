@@ -1,0 +1,84 @@
+<!-- NgTemplate for missing data -->
+<ng-template #noData>
+  <div class="text-center justify-content-center mt-5 mb-5">
+    <img src="../../../../assets/icons/no-data.svg" alt="no-data-svg">
+    <h5 class="text-center mt-2 ms-2">Δε βρέθηκαν δεδομένα</h5>
+  </div>
+</ng-template>
+
+<!-- Header -->
+<div #modal class="modal-header">
+  <h5 class="modal-title" id="financialActModalLabel">Πληροφορίες</h5>
+  <button id="close-button" type="button" class="btn-close" aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"></button>
+</div>
+
+<!-- Body -->
+<div *ngIf="modalData && modalData.length > 0; else noData" class="modal-body custom-modal">
+  <div class="row mt-2">
+    <div class="col">
+      <strong>ΔΗΜΟΣ/ΠΕΡΙΦΕΡΕΙΑ </strong><br />
+      {{
+      modalData[0].label
+      }}
+    </div>
+    <div class="col">
+      <strong>ΠΛΗΘΥΣΜΟΣ </strong><br />{{
+      modalData[0].population.toLocaleString('de-DE')
+      }}
+    </div>
+  </div>
+  <hr />
+  <div class="row mt-2">
+    <div class="col">
+      <strong> ΠΡΩΤΗ ΚΑΤΑΧΩΡΗΣΗ </strong><br />{{
+      modalData[0].first_date
+      }}
+    </div>
+    <div class="col">
+      <strong>ΤΕΛΕΥΤΑΙΑ ΚΑΤΑΧΩΡΗΣΗ </strong><br />{{
+      modalData[0].last_date
+      }}
+    </div>
+  </div>
+  <hr />
+
+  <div class="row mt-2">
+    <div class="col">
+      <strong>ΣΥΝΟΛΙΚΑ ΕΞΟΔΑ (&#8364;): </strong><br />{{
+      modalData[0].amount | number:'1.0-0'
+      }} €
+    </div>
+    <div class="col"><strong>ΣΥΝΟΛΟ ΑΝΑΡΤΗΜΕΝΩΝ ΠΡΑΞΕΩΝ </strong><br />{{
+      modalData[0].total_decisions | number:'1.0-0'
+      }}</div>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col text-center">
+      <div class="dropdown"></div>
+      <button class="btn btn-primary btn-search mb-1" title="Αναζήτηση εξόδων" type="button"
+        class="btn btn-primary btn-search mb-1 dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true"
+        aria-expanded="false">
+        <img src="../../../../assets/icons/search.svg" alt="search-svg" class="me-2" />
+        <p class="vertical-center">Αναζήτηση Εξόδων</p>
+      </button>
+      <ul class="dropdown-menu">
+        <li class="list-centered" (click)="onSearchExpensesThematic()">
+          <a class="dropdown-item">
+            <div class="list-centered">
+              <p class="vertical-center">Ανα Θεματική Κατηγορία</p>
+            </div>
+          </a>
+        </li>
+        <!-- Notes -->
+        <li class="list-centered" (click)="onSearchExpensesKae()">
+          <a class="dropdown-item">
+            <div class="list-centered">
+              <p class="vertical-center">Ανα Καε</p>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>

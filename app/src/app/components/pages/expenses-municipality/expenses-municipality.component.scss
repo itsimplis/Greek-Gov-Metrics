@@ -1,0 +1,354 @@
+.expenses-municipality-wrapper {
+  animation-name: fade-in;
+  animation-duration: 1s;
+}
+
+.content-wrapper-animation {
+  animation-name: fade-in;
+  animation-duration: 1s;
+}
+
+.column-min-width {
+  min-width: 210px;
+  width: 210px;
+  max-width: 210px;
+  position: relative;
+}
+
+.column-max-width {
+  max-width: 250px;
+  //width: 250px;
+}
+
+// .nav-pills .nav-link:not(.active) {
+//   background-color: rgb(227, 243, 255);
+// }
+
+// .nav-pills .nav-link:not(.active):hover {
+//   background-color: rgb(201, 232, 255);
+// }
+
+.dropdown-label {
+  font-weight: 500;
+}
+
+// Tables related styles
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 10px;
+}
+
+thead {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+td {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 250px;
+    overflow: hidden;
+}
+
+th {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 250px;
+    overflow: hidden;
+}
+
+th:hover {
+  cursor: pointer;
+}
+
+.table-container {
+  overflow-x: auto;
+  max-width: 100%;
+  min-height: 800px;
+  overflow-y: auto;
+}
+
+tr:first-child {
+  border-collapse: separate;
+  border-spacing: 0;
+  border-left: none;
+  border-top: none;
+  border-top-left-radius: 9px;
+}
+
+table tr:last-child td:first-child {
+  border-collapse: separate;
+  border-spacing: 0;
+  border-bottom: none;
+  border-left: none;
+  border-bottom-left-radius: 9px;
+}
+
+table tr:last-child td {
+  border-bottom: none;
+}
+
+table tr:last-child td:last-child {
+  border-collapse: separate;
+  border-spacing: 0;
+  border-bottom: none;
+  border-right: none;
+  border-bottom-right-radius: 9px;
+}
+
+.table-tools {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid lightgray;
+  padding: 10px;
+}
+
+.search-input {
+  max-width: 250px;
+  margin-right: 10px;
+}
+
+// Other 
+
+.chart-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-center {
+  text-align: center;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+//FORM CSS
+
+.form-fancy {
+  background-color: #1d4f68 ; /* Darker shade of the complementary color */
+  border-radius: 10px 10px 0 0;
+  padding: 12px;
+}
+
+.form-fancy-note {
+  background-color: #1d4f68;
+  /* Darker shade of the complementary color */
+  border-radius: 10px 10px 0 0;
+  padding: 12px;
+}
+
+.card-title-note {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+}
+
+.card-body-note {
+  padding: 20px;
+}
+
+.card-text-note {
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.card {
+  padding: 0px;
+  overflow: hidden;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.card-text {
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.btn-container{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0px;
+  color: white;
+  background-color: #1d4f68;
+}
+
+.btn-container:hover {
+  background-color: #266788;
+}
+
+.btn-table {
+  text-decoration: none;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  width: auto;
+  max-width: 50px;
+  border-radius: 10px;
+  -webkit-transition: max-width 0.5s;
+  transition: max-width 0.25s;
+}
+
+.btn-table:hover {
+  max-width: 220px;
+}
+
+.btn-table-alt {
+  text-decoration: none;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  max-width: 40px;
+  border-radius: 10px;
+}
+
+.btn-table-alt2 {
+  text-decoration: none;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  max-width: 60px;
+  border-radius: 10px;
+}
+
+.right-edge-btn {
+  position: absolute;
+  right: 0;
+}
+
+.svg-icon {
+  font-family: "Font Awesome 5 Free";
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.btn-text {
+  white-space: nowrap;
+  margin-left: 15px;
+}
+
+.btn-icon-text-simple {
+  white-space: nowrap;
+  margin-left: 15px;
+}
+
+.btn-excel {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  width: auto;
+  max-width: 50px;
+  -webkit-transition: max-width 0.5s;
+  transition: max-width 0.25s;
+}
+
+.btn-excel:hover {
+  max-width: 280px;
+}
+
+.btn-excel {
+  white-space: nowrap;
+  margin-left: 15px;
+}
+
+.dropdown-item:hover,
+.form-check-input:hover,
+.form-check-label:hover {
+  cursor: pointer;
+}
+
+.column-controls,
+.filter-controls {
+  border: 1px solid lightgray;
+  z-index: 3000;
+  overflow: visible;
+}
+
+.custom-alert {
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), -2px -2px 4px rgba(0, 0, 0, 0.3);
+  display: none;
+  position: fixed;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  z-index: 9999;
+  width: max-content;
+}
+
+//color for tabs
+.custom-tab {
+  background-color: #65686e;
+  color: #fff;
+  border-radius: 20px;
+  padding: 10px 20px;
+}
+
+.custom-tab.active {
+  background-color: #2f72b1;
+}
+
+.font-fam {
+  font-family: Georgia, 'Times New Roman', Times, serif
+}
+
+// Style for loading spinner
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(5px);  /* Add this line */
+}
+
+.spinner {
+  border: 16px solid #f3f3f3;
+  border-top: 16px solid #3498db;
+  border-radius: 50%;
+  width: 90px;
+  height: 90px;
+  animation: spin 1s linear infinite;
+}
+
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

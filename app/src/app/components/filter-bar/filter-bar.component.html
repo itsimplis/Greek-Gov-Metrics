@@ -1,0 +1,17 @@
+<div class="row">
+   <div class="col-md-4">
+      <label for="municipality">Δήμος</label>
+      <select id="municipality" class="form-select" [(ngModel)]="selectedMunicipality" (change)="onFiltersChanged()">
+         <option value="">Επιλέξτε</option>
+         <option *ngFor="let item of municipalities" [value]="item.uid">{{item.label}}</option>
+      </select>
+   </div>
+
+   <div class="col-md-4">
+      <label for="sort">Θεματική Κατηγορία</label>
+      <select id="sort" class="form-select" [(ngModel)]="selectedThematicCategory" (change)="onFiltersChanged()">
+         <option value="">Επιλέξτε</option>
+         <option *ngFor="let item of thematic_categories" [value]="item.uid">{{item.label}}</option>
+      </select>
+   </div>
+</div>

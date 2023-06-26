@@ -1,0 +1,50 @@
+<!-- About us section -->
+<div class="container-fluid">
+
+  <div class="row text-center pb-5 pt-3">
+		<div class="col-md-12 text-center">
+			<div class="lc-block"><span editable="inline" class="small mt-4 d-block">INDUSTRIAL PROJECT - GROUP 1</span>
+				<h2 editable="inline" class="display-2 mb-0"><b>Η ομάδα μας</b></h2><br/><br/>
+				<p class="article-p">Σκοπός μας είναι μέσα απο το συγκεκριμένο website να παρουσιάσουμε έναν
+          επαγγελματικό απολογισμό της ομάδας μας, που αποτελείται από 5 φοιτητές
+          Μεταπτυχιακού διπλώματος του University of York.<br/> Η έρευνά μας μας
+          οδήγησε να αναγνωρίσουμε τη σημασία των δημοσιονομικών στοιχείων που
+          παρέχονται από την κυβερνητική πλατφόρμα Διαύγεια. Με στόχο να κάνουμε
+          αυτά τα δεδομένα πιο κατανοητά σε κάθε πολίτη, αναλάβαμε την υλοποίηση των
+          στατιστικών με οπτικά ελκυστικό και εύκολα προσβάσιμο τρόπο. Αυτό το έργο
+          είναι αναπόσπαστο στοιχείο της ομαδικής μας εργασίας για το Industrial
+          Project Course.</p>
+			</div>
+		</div>
+	</div>
+
+
+<!-- Cards of the 5 Students -->
+
+<div class="card shadow">
+  <div class="card-header form-fancy"></div>
+  <div class="my-4 row d-flex justify-content-around">
+    <div class="card bg-light mb-4" style="width: 15rem" *ngFor="let person of persons">
+      <img class="card-img-top ml-0" src="{{ person.imageSource }}" alt="Card image cap" />
+      <div class="card-body">
+        <h5 class="card-title text-center">{{ person.name }}</h5>
+        <p class="card-text text-center">{{ person.description }}</p>
+        <div class="d-flex justify-content-around">
+          <button class="btn btn-fancy" (click)="onButtonClick(person.linkedinUrl)">
+            LinkedIn
+          </button>
+          <button class="btn btn-fancy" (click)="onButtonClick(person.githubUrl)">
+            GitHub
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-header form-fancy"></div>
+</div>
+
+
+
+</div>
+
+

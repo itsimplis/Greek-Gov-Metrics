@@ -1,0 +1,70 @@
+<ng-template #loginSuccess>
+  <div class="title-container mt-4 mb-4">
+    <h3 class="modal-title text-center mb-2" id="financialActModalLabel" ngbAutofocus><strong>Επιτυχής σύνδεση!</strong>
+    </h3>
+    <p class="subtitle text-center"> Συνδεθήκατε επιτυχώς στο λογαρισμό σας</p>
+    </div>
+  <div class="wrapper">
+    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+      <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+      <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+    </svg>
+  </div>
+</ng-template>
+
+<div id="modalLogin" class="rounded">
+
+  <!-- Body -->
+
+  <div class="modal-body rounded">
+    <div class="container" *ngIf="!isAuthenticated() else loginSuccess">
+      <div class="row justify-content-center">
+        <div class="col-10">
+          <div class="title-container mt-4 mb-4">
+            <h3 class="modal-title text-center mb-2" id="financialActModalLabel" ngbAutofocus><strong>Σύνδεση σε
+                λογαριασμό</strong>
+            </h3>
+            <p class="subtitle text-center"> Εισάγετε όνομα χρήστη και κωδικό πρόσβασης</p>
+          </div>
+            <form #loginForm="ngForm" (ngSubmit)="login(loginForm.value.username, loginForm.value.password)">
+              <div class="form-group mt-2 mb-4">
+                <label for="username" class="mb-1"><strong>Username</strong></label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text left-input-prepend">
+                      <img src="../../assets/icons/person.svg">
+                    </div>
+                  </div>
+                  <input type="text" name="username" ngModel required class="form-control right-input-field"
+                    id="username" placeholder="Username">
+                </div>
+              </div>
+              <div class="form-group mt-2 mb-4">
+                <label for="password" class="mb-1"><strong>Password</strong></label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text left-input-prepend">
+                      <img src="../../assets/icons/key.svg">
+                    </div>
+                  </div>
+                  <input type="password" name="password" ngModel required class="form-control right-input-field"
+                    id="password" placeholder="Password">
+                </div>
+              </div>
+              <div class="text-center mt-2">
+                <h6
+                  [ngClass]="{'success-message': output.result === 'success', 'error-message': output.result === 'error' }">
+                  {{output.message}}</h6>
+              </div>
+              <br>
+              <div class="text-center mt-2 mb-2">
+                <button type="button" class="btn btn-danger me-5"
+                  (click)="activeModal.dismiss('Close click')">Κλείσιμο</button>
+                <button type="submit" class="btn btn-primary ">Είσοδος</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

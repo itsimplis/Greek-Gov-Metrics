@@ -1,0 +1,476 @@
+<div class="google-charts-wrapper">
+  <!-- Header -->
+  <div class="bg-light text-dark shadow mb-4">
+    <div class="card-header-note form-fancy-note text-white">
+      <h3 class="card-title-note text-center mb-0">
+        Απεικόνιση στατιστικών σε γραφήματα
+      </h3>
+    </div>
+    <div class="card-body">
+      <p class="card-text card-text-lg text-center font-fam-formal">
+        Γενικά <u>γραφήματα στατιστικών</u>, για τις περιφέρειες και τους δήμους
+        με τα περισσότερα έξοδα ανα θεματική κατηγορία ή Καε. Επιλέγοντας μια
+        περιφέρεια ή έναν δήμο, ανακατευθύνεστε στη σελίδα αναζήτησης εξόδων.
+        <br />
+        Στη κατηγορία γενικών στατιστικών, μπορείτε να δείτε ορισμένα
+        ενδιαφέροντα στατιστικά, καθώς και κάποια "περίεργα" στατιστικά και παράδοξα που
+        ανακαλύψαμε πραγματοποιώντας την έρευνα και το φιλτράρισμα των πράξεων.
+      </p>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <ul class="nav nav-pills nav-justified" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active custom-tab" id="region-statistics-tab" data-bs-toggle="tab"
+        data-bs-target="#regionstatistics" type="button" role="tab" aria-controls="regionstatistics"
+        aria-selected="false">
+        ΓΡΑΦΗΜΑΤΑ ΠΕΡΙΦΕΡΕΙΩΝ
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link custom-tab" id="municipality-statistics-tab" data-bs-toggle="tab"
+        data-bs-target="#municipalitystatistics" type="button" role="tab" aria-controls="municipalitystatistics"
+        aria-selected="false" (click)="loadMunicipalityStatistics()">
+        ΓΡΑΦΗΜΑΤΑ ΔΗΜΩΝ
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link custom-tab" id="generic-statistics-tab" data-bs-toggle="tab"
+        data-bs-target="#genericstatistics" type="button" role="tab" aria-controls="genericstatistics"
+        aria-selected="false" (click)="loadGeneralStatistics()">
+        ΓΕΝΙΚΑ ΣΤΑΤΙΣΤΙΚΑ
+      </button>
+    </li>
+  </ul>
+
+  <!-- Loading spinner template -->
+  <ng-template #loading>
+    <div class="text-center mt-4">
+      <div class="spinner-container">
+        <div class="spinner-border spinner-custom" role="status"></div>
+        <h6 class="text-center mt-2 ms-2">Loading...</h6>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Tab Content -->
+  <div class="tab-content font-fam" id="myTabContent">
+    <!-- Regions Statistics Tab Content -->
+    <div class="tab-pane fade show active" id="regionstatistics" role="tabpanel"
+      aria-labelledby="region-statistics-tab">
+      <div class="content-wrapper-animation pt-1">
+        <div class="chart-container">
+          <div *ngIf="columnChartRegionThematicData && columnChartRegionThematicData.length">
+            <google-chart [type]="columnChartType" [data]="columnChartRegionThematicData"
+              [options]="columnChartRegionThematicOptions" [columns]="columnChartRegionThematicNames"
+              (select)="onColumnChartRegionThematicSelect($event)"
+              (mouseover)="onColumnChartRegionThematicMouseOver($event)"
+              (mouseleave)="onColumnChartRegionThematicMouseLeave($event)"
+              class="chart-selectable-region-thematic"></google-chart>
+            <hr class="d-md-none" />
+          </div>
+          <div *ngIf="barChartRegionKaeData && barChartRegionKaeData.length">
+            <google-chart [type]="barChartType" [data]="barChartRegionKaeData" [options]="barChartRegionKaeOptions"
+              [columns]="barChartRegionKaeNames" (select)="onBarChartRegionKaeSelect($event)"
+              (mouseover)="onBarChartRegionKaeMouseOver($event)" class="chart-selectable-region-kae"></google-chart>
+            <hr class="d-md-none" />
+          </div>
+        </div>
+        <div *ngIf="pieChartRegionData && pieChartRegionData.length" class="chart-container">
+          <google-chart [type]="pieChartType" [data]="pieChartRegionData" [options]="pieChartRegionOptions"
+            (select)="onPieChartRegionSelect($event)" (mouseover)="onPieChartRegionMouseOver($event)"
+            (mouseleave)="onPieChartRegionMouseLeave($event)" class="chart-selectable-region"></google-chart>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================== MUNICIPALITY CHARTS ====================== -->
+    <div class="tab-pane fade" id="municipalitystatistics" role="tabpanel"
+      aria-labelledby="municipality-statistics-tab">
+      <div class="content-wrapper-animation pt-1">
+        <div class="chart-container">
+          <div *ngIf="columnChartMunicipalityThematicData && columnChartMunicipalityThematicData.length">
+            <google-chart [type]="barChartType" [data]="columnChartMunicipalityThematicData"
+              [options]="columnChartMunicipalityThematicOptions" [columns]="columnChartMunicipalityThematicNames"
+              (select)="onColumnChartMunicipalityThematicSelect($event)"
+              (mouseover)="onColumnChartMunicipalityThematicMouseOver($event)"
+              (mouseleave)="onColumnChartMunicipalityThematicMouseLeave($event)"
+              class="chart-selectable-municipality-thematic"></google-chart>
+          </div>
+          <div *ngIf="columnChartMunicipalityKaeData && columnChartMunicipalityKaeData.length">
+            <google-chart [type]="columnChartType" [data]="columnChartMunicipalityKaeData"
+              [options]="columnChartMunicipalityKaeOptions" [columns]="columnChartMunicipalityKaeNames"
+              (select)="onColumnChartMunicipalityKaeSelect($event)"
+              (mouseover)="onColumnChartMunicipalityKaeMouseOver($event)"
+              (mouseleave)="onColumnChartMunicipalityKaeMouseLeave($event)"
+              class="chart-selectable-municipality-kae"></google-chart>
+          </div>
+        </div>
+        <div *ngIf="pieChartMunicipalityData && pieChartMunicipalityData.length" class="chart-container">
+          <google-chart [type]="pieChartType" [data]="pieChartMunicipalityData" [options]="pieChartMunicipalityOptions"
+            (select)="onPieChartMunicipalitySelect($event)" (mouseover)="onPieChartMunicipalityMouseOver($event)"
+            (mouseleave)="onPieChartMunicipalityMouseLeave($event)"
+            class="chart-selectable-municipality"></google-chart>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="genericstatistics" role="tabpanel" aria-labelledby="generic-statistics-tab">
+      <!-- STATISTICS CARDS -->
+
+      <div class="container-fluid font-fam">
+        <section id="minimal-statistics">
+          <div class="row mt-3 mb-2">
+            <div class="col-12 mt-3 mb-1 text-center content-center">
+              <h4 class="text-uppercase mb-1">ΕΝΔΙΑΦΕΡΟΝΤΑ ΣΤΑΤΙΣΤΙΚΑ</h4>
+              <p>
+                Δεδομένα και ενδιαφέρουσες πληροφορίες για Δήμους και
+                Περιφέρειες
+              </p>
+            </div>
+          </div>
+          <div class="row" *ngIf="firstUpdate && firstUpdate.length && latestUpdate.length && decisionsUnder1Euro.length && decisionsOver1MilEuro && decisionsOver1MilEuro.length">
+            <div class="col-xl-3 col-sm-6 col-12">
+              <div class="card">
+                <div class="card-content">
+                  <div class="card-body">
+                    <div class="media d-flex">
+                      <div class="align-self-center">
+                        <i class="icon-graph success font-large-2 float-left"></i>
+                      </div>
+                      <div *ngFor="let data of firstUpdate" class="media-body text-right">
+                        <span>Αρχική ενημέρωση δεδομένων</span>
+                        <h3 class="result-text">{{ data.first_date }}</h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 col-12">
+              <div class="card">
+                <div class="card-content">
+                  <div class="card-body">
+                    <div class="media d-flex">
+                      <div class="align-self-center">
+                        <i class="icon-pencil primary font-large-2 float-left"></i>
+                      </div>
+                      <div *ngFor="let data of latestUpdate" class="media-body text-right">
+                        <span class="text-center">Τελευταία ενημέρωση δεδομένων</span>
+                        <h3 class="result-text">
+                          {{ data.last_date }}
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 col-12">
+              <div class="card">
+                <div class="card-content">
+                  <div class="card-body">
+                    <div class="media d-flex">
+                      <div class="align-self-center">
+                        <i class="icon-speech warning font-large-2 float-left"></i>
+                      </div>
+                      <div *ngFor="let data of decisionsOver1MilEuro" class="media-body text-right">
+                        <span>Πράξεις με ποσό άνω του 1.000.000€</span>
+                        <h3 class="result-text">
+                          {{ data.amount }}
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 col-12">
+              <div class="card">
+                <div class="card-content">
+                  <div class="card-body">
+                    <div class="media d-flex">
+                      <div class="align-self-center">
+                        <i class="icon-speech warning font-large-2 float-left"></i>
+                      </div>
+                      <div *ngFor="let data of decisionsUnder1Euro" class="media-body text-right">
+                        <span>Πράξεις με ποσό κάτω του 1€</span>
+                        <h3 class="result-text">
+                          {{ data.amount }}
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="stats-subtitle">
+          <hr />
+          <div *ngIf="decisionsCurrentYear && decisionsCurrentYear.length && decisionsOver1MilEuro.length" class="row">
+            <div class="col-xl-6 col-md-12">
+              <div class="card">
+                <div class="card-content">
+                  <div class="card-body cleartfix">
+                    <div class="media align-items-stretch">
+                      <div class="align-self-center">
+                        <i class="icon-speech warning font-large-2 mr-2"></i>
+                      </div>
+                      <div class="media-body text-center">
+                        <h4><u>Συνολικές πράξεις</u></h4>
+                      </div>
+                      <div *ngFor="let data of decisionsOver1MilEuro" class="align-self-center">
+                        <h1 class="text-center result-text">
+                          {{
+                          data.total_records_checked.toLocaleString("de-DE")
+                          }}
+                        </h1>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-6 col-md-12">
+              <div class="card overflow-hidden">
+                <div class="card-content">
+                  <div class="card-body cleartfix">
+                    <div class="media align-items-stretch">
+                      <div class="align-self-center">
+                        <i class="icon-pencil primary font-large-2 mr-2"></i>
+                      </div>
+                      <div class="media-body text-center">
+                        <u>
+                          <h4 class="text-center">
+                            Συνολικές πράξεις το τρέχων έτος
+                          </h4>
+                        </u>
+                      </div>
+                      <div *ngFor="let data of decisionsCurrentYear" class="align-self-center">
+                        <h1 class="text-center result-text">
+                          {{ data.last_year.toLocaleString("de-DE") }}
+                        </h1>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br />
+          <div *ngIf="
+              munMostExpenses && munMostExpenses.length && regionMostExpenses && regionMostExpenses.length;" class="row">
+            <div class="col-xl-6 col-md-12">
+              <div class="card">
+                <div class="card-content">
+                  <div class="card-body cleartfix">
+                    <div class="media align-items-stretch">
+                      <div class="media-body text-center">
+                        <u>
+                          <h4 class="text-center">
+                            Δήμος με τα περισσότερα έξοδα
+                          </h4>
+                        </u>
+                      </div>
+                      <div *ngFor="let data of munMostExpenses" class="align-self-center">
+                        <h3 class="mr-2 text-center result-text">
+                          {{ data.municipality }} <br /><strong>{{ data.amount.toLocaleString("de-DE") }} €</strong>
+                        </h3>
+                      </div>
+                      <div class="align-self-center">
+                        <i class="icon-heart danger font-large-2"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xl-6 col-md-12">
+              <div class="card">
+                <div class="card-content">
+                  <div class="card-body cleartfix">
+                    <div class="media align-items-stretch">
+                      <div *ngFor="let data of regionMostExpenses" class="align-self-center">
+                        <div class="media-body text-center">
+                          <u>
+                            <h4 class="text-center">
+                              Περιφέρεια με τα περισσότερα έξοδα
+                            </h4>
+                          </u>
+                        </div>
+                        <h3 class="mr-2 text-center result-text">
+                          {{ data.region }} <br /><strong>{{ data.amount.toLocaleString("de-DE") }} €</strong>
+                        </h3>
+                      </div>
+                      <div class="align-self-center">
+                        <i class="icon-wallet success font-large-2"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div *ngIf="top5Kae && top5Kae.length && top5Thematic.length && top5MunicipalitiesDecisions.length && top5Signers" class="container-fluid">
+        <hr />
+        <div class="card">
+          <div class="row custom-padding12">
+            <div class="col-lg-6 text-center">
+              <img class="img-fluid rounded h-90 p-5 text-center" src="../../../../assets/statistics-images/top-5.png"
+                alt="Photo by Austin Distel" loading="lazy" />
+            </div>
+            <!-- /col -->
+            <div class="col-lg-6 text-center align-self-center">
+              <div class="lc-block mb-3 pt-4"></div>
+              <div class="lc-block">
+                <div id="carouselTestimonial" class="carousel slide pb-4" data-bs-ride="carousel">
+                  <div class="carousel-inner px-5">
+                    <div class="carousel-item">
+                      <div class="row">
+                        <div class="lc-block">
+                          <h2 editable="inline" class="mb-1">
+                            Οι πιο δημοφιλείς<br />θεματικές κατηγορίες
+                          </h2>
+                          <br />
+                        </div>
+                        <div class="lc-block">
+                          <div editable="rich">
+                            <p class="rfs-8">
+                              <ng-container *ngFor="let data of top5Thematic">
+                                <h6>
+                                  <strong>{{ data.thematic_label }}</strong>
+                                </h6>
+                                <span class="result-text">{{
+                                  data.thematic_total_decisions
+                                  }}
+                                  πράξεις</span>
+                              </ng-container>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="carousel-item">
+                      <div class="row">
+                        <div class="lc-block">
+                          <h2 editable="inline" class="mb-1">
+                            Οι πιο δημοφιλείς <br />Κωδικοί Αριθμών Εξόδων(ΚΑΕ)
+                          </h2>
+                          <br />
+                        </div>
+                        <div class="lc-block">
+                          <div editable="rich">
+                            <p class="rfs-8">
+                              <ng-container *ngFor="let data of top5Kae">
+                                <h6>
+                                  <strong>{{ data.kae_label }}</strong>
+                                </h6>
+                                <span class="result-text">{{ data.kae_total_decisions }} πράξεις</span>
+                              </ng-container>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="carousel-item active">
+                      <div class="row">
+                        <div class="lc-block">
+                          <h2 editable="inline" class="mb-1">
+                            Οι δήμοι με τις περισσότερες <br />
+                            αναρτημένες πράξεις
+                          </h2>
+                          <br />
+                        </div>
+                        <div class="lc-block">
+                          <div editable="rich">
+                            <p class="rfs-8">
+                              <ng-container *ngFor="
+                                  let municipality of top5MunicipalitiesDecisions
+                                ">
+                                <h6>
+                                  <strong>{{
+                                    municipality.municipality
+                                    }}</strong>
+                                </h6>
+                                <span class="result-text">{{
+                                  municipality.total_decisions
+                                  }}
+                                  πράξεις</span>
+                              </ng-container>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="carousel-item">
+                      <div class="row">
+                        <div class="lc-block">
+                          <h2 editable="inline" class="mb-1">
+                            Οι υπάλληλοι με τις περισσότερες υπογραφές πράξεων
+                            <br />
+                          </h2>
+                          <br />
+                        </div>
+                        <div class="lc-block">
+                          <div editable="rich">
+                            <p class="rfs-8">
+                              <ng-container *ngFor="let data of top5Signers">
+                                <h6>
+                                  <strong>{{ data.signer }} -
+                                    {{ data.signer_municipality }}</strong>
+                                </h6>
+                                <span class="result-text">{{
+                                  data.signer_total_decisions
+                                  }}
+                                  υπογεγγραμένες πράξεις</span>
+                              </ng-container>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="w-100 text-center mt-4">
+                    <a class="carousel-control-prev position-relative d-inline me-4" href="#carouselTestimonial"
+                      data-bs-slide="prev">
+                      <svg width="1.8em" height="1.8em" viewBox="0 0 16 16" class="text-dark" fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                          d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z">
+                        </path>
+                      </svg>
+                      <span class="visually-hidden">Previous</span>
+                    </a>
+                    <a class="carousel-control-next position-relative d-inline" href="#carouselTestimonial"
+                      data-bs-slide="next">
+                      <svg width="1.8em" height="1.8em" viewBox="0 0 16 16" class="text-dark" fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                          d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z">
+                        </path>
+                      </svg>
+                      <span class="visually-hidden">Next</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /col -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isLoading()" class="overlay spinner-container">
+      <div class="spinner"></div>
+      <br>
+      <h5 class="text-center mt-2 ms-3">Loading Data...</h5>
+    </div>
+  </div>
+</div>

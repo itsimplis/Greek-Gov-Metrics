@@ -1,0 +1,39 @@
+<div class="bg-light text-dark shadow mb-4">
+  <div class="card-header form-fancy text-white">
+    <h3 class="card-title text-center mb-0">
+      Απεικόνιση στατιστικών σε χάρτη
+    </h3>
+  </div>
+  <div class="card-body">
+    <p class="card-text card-text-lg text-center font-fam">
+     Πλοηγηθείτε πάνω στο <u>χάρτη περιφερειών</u> ή στο <u>χάρτη δήμων</u> και ανακαλύψτε ενδιαφέροντα στατιστικά. <br/>
+     Επιλέξτε την αναζήτηση Εξόδων για να μεταφερεθείτε στην ανάλυση αυτών των εξόδων.
+    </p>
+  </div>
+</div>
+
+<br/>
+<br/>
+
+
+
+
+<ul class="nav nav-pills nav-justified" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="btn btn-primary btn-lg rounded-pill active" id="region-statistics-tab" data-bs-toggle="tab"
+      type="button" role="tab" aria-selected="false" (click)="onMapTypeChange('Περιφερειών')">Χάρτης Περιφερειών</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="btn btn-primary btn-lg rounded-pill" id="municipality-statistics-tab" data-bs-toggle="tab"
+      data-bs-target="#municipalitystatistics" type="button" role="tab" aria-controls="municipalitystatistics"
+      aria-selected="false" (click)="onMapTypeChange('Δήμων')">Χάρτης Δήμων</button>
+  </li>
+</ul>
+<br>
+<div class="row justify-content-center">
+  <div class="col-10">
+    <div class="card bg-light shadow mb-5">
+      <div id="map" class="p-2"></div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+.modal-body {
+    background-color: whitesmoke;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.modal-footer {
+    background-color: whitesmoke;
+}
+
+.title-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.subtitle {
+    font-weight: 500;
+    color: rgb(101, 123, 123);
+}
+
+.left-input-prepend {
+    border-right: none;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.right-input-field {
+    border-left: none;
+}
+
+.success-message {
+    margin-bottom: 0 !important;
+    color: rgb(0, 212, 0);
+    font-weight: 500;
+}
+
+.error-message {
+    margin-bottom: 0 !important;
+    color: red;
+    font-weight: 500;
+}

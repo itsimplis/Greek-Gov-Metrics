@@ -1,0 +1,580 @@
+<div class="expenses-region-wrapper">
+
+  <!-- Header -->
+  <div class="bg-light text-dark shadow mb-4">
+    <div class="card-header-note form-fancy-note text-white">
+      <h3 class="card-title-note text-center mb-0">Αναζήτηση εξόδων Περιφέρειας</h3>
+    </div>
+    <div class="card-body d-flex flex-column">
+      <div class="card-text-container flex-grow-1">
+        <p class="card-text card-text-lg text-center font-fam">
+          Επιλέγοντας την επιθυμητή <u>περιφέρεια</u>, μπορείτε δείτε τα έξοδα της σε διαγράμματα, για κάθε <u>θεματική
+            κατηγορία</u> ή <u>Καε</u>.
+          <br>Στη συνέχεια, επιλέγοντας την επιθυμητή θεματική κατηγορία ή Καε, μπορείτε να δείτε τα έξοδά της ένα προς
+          ένα.
+        </p>
+      </div>
+      <div class="button-container text-end">
+        <button class="btn btn-container" routerLink="/expenses-municipality"><img
+            src="../../../../assets/icons/switch.svg" class="me-3">Αναζήτηση ανά Δήμο</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <ul class="nav nav-pills nav-justified" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active custom-tab" id="expenses-per-thematic-tab" data-bs-toggle="tab"
+        data-bs-target="#expensesperthematic" type="button" role="tab" aria-controls="expensesperthematic"
+        aria-selected="false">ΑΝΑ ΘΕΜΑΤΙΚΗ ΚΑΤΗΓΟΡΙΑ</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link custom-tab" id="expenses-per-kae-tab" data-bs-toggle="tab"
+        data-bs-target="#expensesperkae" type="button" role="tab" aria-controls="kaes" aria-selected="false">ΑΝΑ
+        ΚΑΕ</button>
+    </li>
+  </ul>
+
+  <!-- Tab Content -->
+  <div class="tab-content" id="myTabContent">
+    <!-- Expenses per region per thematic category -->
+    <div class="tab-pane fade show active" id="expensesperthematic" role="tabpanel"
+      aria-labelledby="expenses-per-thematic-tab">
+      <div class="flex-row">
+        <div class="col">
+          <!-- Dropdowns Card -->
+          <div class="card bg-light text-dark shadow mb-4 mt-1">
+            <div class="card-body mb-2">
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="mb-1 dropdown-label" for="region-thematic-select">Περιφέρεια</label>
+                  <select id="region-thematic-select" class="form-select" [(ngModel)]="selectedRegionThematic"
+                    (ngModelChange)="onRegionThematicChanged($event)">
+                    <option value="">-- Επιλέξτε --</option>
+                    <option *ngFor="let item of regions" [value]="item.uid">{{item.label}}</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="mb-1 dropdown-label" for="reg-thematic-dropdown-select">Θεματική Κατηγορία</label>
+                  <select id="reg-thematic-dropdown-select" class="form-select disabled" [(ngModel)]="selectedThematic"
+                    (ngModelChange)="onThematicChanged($event)" [disabled]="!selectedRegionThematic">
+                    <option value="">-- Επιλέξτε --</option>
+                    <option *ngFor="let item of thematicCategories" [value]="item.uid">{{item.label}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="content-wrapper-animation"
+        *ngIf="(this.pieChartDataThematic && this.pieChartDataThematic.length > 0)">
+        <h3 class="text-center">{{selectedRegionThematicLabel}}<br>Έξοδα ανα Θεματική Κατηγορία</h3>
+        <hr>
+        <div class="chart-container">
+          <google-chart [data]="pieChartDataThematic" [type]="pieChartType" [options]="pieChartOptionsThematic"
+            class="chart-selectable-thematic" (select)="onPieChartThematicSelect($event)"
+            (mouseover)="onPieChartThematicMouseOver($event)"
+            (mouseleave)="onPieChartThematicMouseLeave($event)"></google-chart>
+          <google-chart [data]="lineChartDataThematic" [type]="lineChartType"
+            [options]="lineChartOptionsThematic"></google-chart>
+        </div>
+      </div>
+      <div class="content-wrapper-animation" *ngIf="(this.expensesPerThematic && this.expensesPerThematic.length > 0)">
+        <hr>
+        <h4 id="thematic-table-header" class="text-center mb-3"> {{selectedRegionThematicLabel}} <br /> Έξοδα στη
+          κατηγορία '{{selectedThematicLabel}}' </h4>
+        <!-- Table Tools-->
+        <div class="table-tools bg-light text-dark shadow rounded mb-3">
+          <!--  Thematic Columns -->
+          <div class="dropdown me-3">
+            <button type="button" class="btn btn-light dropdown-toggle column-controls" data-bs-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              <img src="../../assets/icons/columns.svg"> <span class="btn-icon-text-simple"></span>Στήλες</button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="columnsThematic.ada.visible" class="form-check-input" type="checkbox" value=""
+                      id="checkth1" />
+                    <label class="form-check-label" for="checkth1">{{columnsThematic.ada.header}}</label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="columnsThematic.region.visible" class="form-check-input" type="checkbox"
+                      value="" id="checkth2" />
+                    <label class="form-check-label" for="checkth2">{{columnsThematic.region.header}}</label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="columnsThematic.thematic_category.visible" class="form-check-input"
+                      type="checkbox" value="" id="checkth3" />
+                    <label class="form-check-label" for="checkth3">{{columnsThematic.thematic_category.header}}</label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="columnsThematic.subject.visible" class="form-check-input" type="checkbox"
+                      value="" id="checkth4" />
+                    <label class="form-check-label" for="checkth4">{{columnsThematic.subject.header}}</label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="columnsThematic.pdf_url.visible" class="form-check-input" type="checkbox"
+                      value="" id="checkth5" />
+                    <label class="form-check-label" for="checkth5">{{columnsThematic.pdf_url.header}}</label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="columnsThematic.signer.visible" class="form-check-input" type="checkbox"
+                      value="" id="checkth6" />
+                    <label class="form-check-label" for="checkth6">{{columnsThematic.signer.header}}</label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="columnsThematic.publish_date.visible" class="form-check-input" type="checkbox"
+                      value="" id="checkth7" />
+                    <label class="form-check-label" for="checkth7">{{columnsThematic.publish_date.header}}</label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="columnsThematic.amount.visible" class="form-check-input" type="checkbox"
+                      value="" id="checkth8" />
+                    <label class="form-check-label" for="checkth8">{{columnsThematic.amount.header}}</label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="columnsThematic.suspicious.visible" class="form-check-input" type="checkbox"
+                      value="" id="checkth9" />
+                    <label class="form-check-label" for="checkth9">{{columnsThematic.suspicious.header}}</label>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <!-- Thematic Filters -->
+          <div class="dropdown me-3">
+            <button type="button" class="btn btn-light dropdown-toggle filter-controls" data-bs-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              <img src="../../assets/icons/filters.svg"> <span class="btn-icon-text-simple"></span>Φίλτρα</button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="filtersThematic.emptyAmount.enabled" (change)="onThematicCheckboxChange()"
+                      class="form-check-input" type="checkbox" value="" id="checkfth1" />
+                    <label class="form-check-label" for="checkfth1">{{filtersThematic.emptyAmount.header}}</label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="filtersThematic.emptyPdf.enabled" (change)="onThematicCheckboxChange()"
+                      class="form-check-input" type="checkbox" value="" id="checkfth2" />
+                    <label class="form-check-label" for="checkfth2">{{filtersThematic.emptyPdf.header}}</label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="filtersThematic.suspiciousActs.enabled" (change)="onThematicCheckboxChange()"
+                      class="form-check-input" type="checkbox" value="" id="checkfth3" />
+                    <label class="form-check-label" for="checkfth3">{{filtersThematic.suspiciousActs.header}}</label>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <!-- Thematic Excel -->
+          <div class="dropdown">
+            <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+              <img src="../../assets/icons/xlsx.svg"> <span class="btn-icon-text-simple">Αποθήκευση</span></button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item"
+                (click)="exportTableToExcel('region-thematic-table', selectedRegionThematicLabel, selectedThematicLabel, false)">Τρέχουσα
+                σελίδα (.xlsx)</a>
+              <a class="dropdown-item"
+                (click)="exportTableToExcel('region-thematic-table', selectedRegionThematicLabel, selectedThematicLabel, true)">Ολόκληρος
+                πίνακας (.xlsx)</a>
+            </div>
+          </div>
+          <pagination-controls style="margin-left: auto !important; margin-right: auto !important;"
+            class="ngx-pagination" id="pagination-thematic" (pageChange)="onThematicTablePageChanged($event)"
+            (pageBoundsCorrection)="onThematicTablePageChanged($event)" [maxSize]=7 [directionLinks]="true"
+            [autoHide]="true" [responsive]="true" previousLabel="Προηγούμενο" nextLabel="Επόμενο"
+            screenReaderPaginationLabel="Σελίδοποίηση" screenReaderPageLabel="Σελίδα"
+            screenReaderCurrentLabel="Είστε στη σελίδα">
+          </pagination-controls>
+          <input type="text" style="margin-left: auto; margin-right: 0px;" (input)="onThematicSearchInputChange($event)"
+            class="form-control search-input" id="searchInput" placeholder="Αναζήτηση" />
+        </div>
+        <div class="table-container">
+          <table id="region-thematic-table" class="table table-hover table-striped align-middle overflow-hidden">
+            <thead class="table-primary">
+              <tr>
+                <th *ngIf="columnsThematic.ada.visible" scope="col"
+                  (click)="sortTable('thematic', columnsThematic.ada.key)">{{columnsThematic.ada.header}}</th>
+                <th *ngIf="columnsThematic.region.visible" scope="col"
+                  (click)="sortTable('thematic', columnsThematic.region.key)">{{columnsThematic.region.header}}</th>
+                <th *ngIf="columnsThematic.thematic_category.visible" scope="col"
+                  (click)="sortTable('thematic', columnsThematic.thematic_category.key)">
+                  {{columnsThematic.thematic_category.header}}</th>
+                <th *ngIf="columnsThematic.subject.visible" scope="col"
+                  (click)="sortTable('thematic', columnsThematic.subject.key)">{{columnsThematic.subject.header}}</th>
+                <th *ngIf="columnsThematic.pdf_url.visible" scope="col"
+                  (click)="sortTable('thematic', columnsThematic.pdf_url.key)">{{columnsThematic.pdf_url.header}}</th>
+                <th *ngIf="columnsThematic.signer.visible" scope="col"
+                  (click)="sortTable('thematic', columnsThematic.signer.key)">{{columnsThematic.signer.header}}</th>
+                <th *ngIf="columnsThematic.publish_date.visible" scope="col"
+                  (click)="sortTable('thematic', columnsThematic.publish_date.key)">
+                  {{columnsThematic.publish_date.header}}
+                </th>
+                <th *ngIf="columnsThematic.amount.visible" scope="col"
+                  (click)="sortTable('thematic', columnsThematic.amount.key)">{{columnsThematic.amount.header}}
+                  (&#8364;)</th>
+                <th *ngIf="columnsThematic.suspicious.visible" scope="col"
+                  (click)="sortTable('thematic', columnsThematic.suspicious.key)" class="text-center">
+                  {{columnsThematic.suspicious.header}}
+                </th>
+                <th scope="col" class="column-min-width">Ενέργεια</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let item of expensesPerThematicFiltered | paginate: {id: 'pagination-thematic', itemsPerPage: itemsPerPageThematic, currentPage: currentPageThematic}; let i = index;">
+                <td *ngIf="columnsThematic.ada.visible" data-toggle="tooltip" title={{item.ada}}>{{item.ada}}</td>
+                <td *ngIf="columnsThematic.region.visible" data-toggle="tooltip" title={{item.region}}>{{item.region}}
+                </td>
+                <td *ngIf="columnsThematic.thematic_category.visible" data-toggle="tooltip"
+                  title={{item.thematic_category}}>{{item.thematic_category}}</td>
+                <td *ngIf="columnsThematic.subject.visible" data-toggle="tooltip" title={{item.subject}}>
+                  {{item.subject}}</td>
+                <td *ngIf="columnsThematic.pdf_url.visible" data-toggle="tooltip" title={{item.pdf_url}}>
+                  {{item.pdf_url}}</td>
+                <td *ngIf="columnsThematic.signer.visible" data-toggle="tooltip" title={{item.signer}}>
+                  {{item.signer}}</td>
+                <td *ngIf="columnsThematic.publish_date.visible" data-toggle="tooltip" title={{item.publish_date}}>
+                  {{item.publish_date}}</td>
+                <td *ngIf="columnsThematic.amount.visible" data-toggle="tooltip" title={{item.amount}}>
+                  <ng-container *ngIf="item.amount; else noAmount">€ {{item.amount | number:'1.2-2'}}</ng-container>
+                  <ng-template #noAmount></ng-template>
+                </td>
+                <td *ngIf="columnsThematic.suspicious.visible" data-toggle="tooltip"
+                  [title]="item.suspicious == 1 ? 'Αμφισβητήσιμα δεδομένα!' : 'Αξιόπιστα δεδομένα'" class="text-center">
+                  <img *ngIf="item.suspicious == 0" src="../../../../assets/icons/normal-lg.svg" class="me-1">
+                  <img *ngIf="item.suspicious == 1" src="../../../../assets/icons/suspicious-lg.svg" class="me-1">
+                </td>
+                <td class="column-min-width">
+                  <button class="btn btn-primary btn-table-alt2 me-2" (click)="onViewDetailsButtonClick(item.ada)"
+                    data-toggle="tooltip" title="Δείτε αναλυτικά">
+                    <img class="svg-icon" src="../../assets/icons/eye-fill.svg">
+                  </button>
+                  <button *ngIf="isAuthenticated()" class="btn btn-success btn-table-alt right-edge-btn me-2"
+                    (click)="onAddToPersonalList(item.ada)" data-toggle="tooltip" title="Προσθήκη σε προσωπική λίστα">
+                    <img class="svg-icon" src="../../assets/icons/add-lg.svg">
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expenses per region per kae -->
+    <div class="tab-pane fade" id="expensesperkae" role="tabpanel" aria-labelledby="expenses-per-kae-tab">
+      <div class="flex-row">
+        <div class="col">
+          <!-- Dropdowns Card -->
+          <div class="card bg-light text-dark shadow mb-4 mt-1">
+            <div class="card-body mb-2">
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="mb-1 dropdown-label" for="region-kae-select">Περιφέρεια</label>
+                  <select id="region-kae-select" class="form-select" [(ngModel)]="selectedRegionKae"
+                    (ngModelChange)="onRegionKaeChanged($event)">
+                    <option value="">-- Επιλέξτε --</option>
+                    <option *ngFor="let item of regions" [value]="item.uid">{{item.label}}</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="mb-1 dropdown-label" for="reg-kae-dropdown-select">Καε</label>
+                  <select id="reg-kae-dropdown-select" class="form-select" [(ngModel)]="selectedKae"
+                    (ngModelChange)="onKaeChanged($event)" [disabled]="!selectedRegionKae">
+                    <option value="">-- Επιλέξτε --</option>
+                    <option *ngFor="let item of kaes" [value]="item.uid">{{item.label}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="content-wrapper-animation" *ngIf="(this.pieChartDataKae && this.pieChartDataKae.length > 0)">
+        <h3 class="text-center">{{selectedRegionKaeLabel}}<br>Έξοδα ανα Καε</h3>
+        <hr>
+        <div class="chart-container">
+          <google-chart [type]="pieChartType" [data]="pieChartDataKae" [options]="pieChartOptionsKae"
+            class="chart-selectable-kae" (select)="onPieChartKaeSelect($event)"
+            (mouseover)="onPieChartKaeMouseOver($event)" (mouseleave)="onPieChartKaeMouseLeave($event)"></google-chart>
+          <google-chart [data]="lineChartDataKae" [type]="lineChartType" [options]="lineChartOptionsKae"></google-chart>
+        </div>
+      </div>
+      <div class="content-wrapper-animation" *ngIf="(this.expensesPerKae && this.expensesPerKae.length > 0)">
+        <hr>
+        <h3 id="kae-table-header" class="text-center mb-3">{{selectedRegionKaeLabel}} <br /> Έξοδα στη κατηγορία
+          '{{selectedKaeLabel}}' </h3>
+        <!-- Kae Table Tools -->
+        <div class="table-tools">
+          <!-- Kae Columns-->
+          <div class="dropdown me-3">
+            <button type="button" class="btn btn-light dropdown-toggle column-controls" data-bs-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              <img src="../../assets/icons/columns.svg"> <span class="btn-icon-text-simple"></span>Στήλες</button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="columnsKae.ada.visible" class="form-check-input" type="checkbox" value=""
+                      id="checkka1" />
+                    <label class="form-check-label" for="checkka1">{{columnsKae.ada.header}}</label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="columnsKae.region.visible" class="form-check-input" type="checkbox" value=""
+                      id="checkka2" />
+                    <label class="form-check-label" for="checkka2">{{columnsKae.region.header}}</label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="columnsKae.kae.visible" class="form-check-input" type="checkbox" value=""
+                      id="checkka3" />
+                    <label class="form-check-label" for="checkka3">{{columnsKae.kae.header}}</label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="columnsKae.subject.visible" class="form-check-input" type="checkbox" value=""
+                      id="checkka4" />
+                    <label class="form-check-label" for="checkka4">{{columnsKae.subject.header}}</label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="columnsKae.pdf_url.visible" class="form-check-input" type="checkbox" value=""
+                      id="checkka5" />
+                    <label class="form-check-label" for="checkka5">{{columnsKae.pdf_url.header}}</label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="columnsKae.signer.visible" class="form-check-input" type="checkbox" value=""
+                      id="checkka6" />
+                    <label class="form-check-label" for="checkka6">{{columnsKae.signer.header}}</label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="columnsKae.publish_date.visible" class="form-check-input" type="checkbox"
+                      value="" id="checkka7" />
+                    <label class="form-check-label" for="checkka7">{{columnsKae.publish_date.header}}</label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="columnsKae.amount.visible" class="form-check-input" type="checkbox" value=""
+                      id="checkka8" />
+                    <label class="form-check-label" for="checkka8">{{columnsKae.amount.header}}</label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="columnsKae.suspicious.visible" class="form-check-input" type="checkbox" value=""
+                      id="checkka9" />
+                    <label class="form-check-label" for="checkka9">{{columnsKae.suspicious.header}}</label>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <!-- Kae Filters -->
+          <div class="dropdown me-3">
+            <button type="button" class="btn btn-light dropdown-toggle filter-controls" data-bs-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              <img src="../../assets/icons/filters.svg"> <span class="btn-icon-text-simple"></span>Φίλτρα</button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="filtersKae.emptyAmount.enabled" (change)="onKaeCheckboxChange()"
+                      class="form-check-input" type="checkbox" value="" id="checkfka1" />
+                    <label class="form-check-label" for="checkfka1">{{filtersKae.emptyAmount.header}}</label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="filtersKae.emptyPdf.enabled" (change)="onKaeCheckboxChange()"
+                      class="form-check-input" type="checkbox" value="" id="checkfka2" />
+                    <label class="form-check-label" for="checkfka2">{{filtersKae.emptyPdf.header}}</label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input [(ngModel)]="filtersKae.suspiciousActs.enabled" (change)="onKaeCheckboxChange()"
+                      class="form-check-input" type="checkbox" value="" id="checkfka3" />
+                    <label class="form-check-label" for="checkfka3">{{filtersKae.suspiciousActs.header}}</label>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <!-- Kae Excel -->
+          <div class="dropdown">
+            <button class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+              <img src="../../assets/icons/xlsx.svg"> <span class="btn-icon-text-simple">Αποθήκευση</span></button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item"
+                (click)="exportTableToExcel('region-kae-table', selectedRegionKaeLabel, selectedKaeLabel, false)">Τρέχουσα
+                σελίδα (.xlsx)</a>
+              <a class="dropdown-item"
+                (click)="exportTableToExcel('region-kae-table', selectedRegionKaeLabel, selectedKaeLabel, true)">Ολόκληρος
+                πίνακας (.xlsx)</a>
+            </div>
+          </div>
+          <pagination-controls style="margin-left: auto !important; margin-right: auto !important;"
+            class="ngx-pagination" id="pagination-kae" (pageChange)="onKaeTablePageChanged($event)"
+            (pageBoundsCorrection)="onKaeTablePageChanged($event)" [maxSize]=7 [directionLinks]="true" [autoHide]="true"
+            [responsive]="true" previousLabel="Προηγούμενο" nextLabel="Επόμενο"
+            screenReaderPaginationLabel="Σελίδοποίηση" screenReaderPageLabel="Σελίδα"
+            screenReaderCurrentLabel="Είστε στη σελίδα">
+          </pagination-controls>
+          <input type="text" style="margin-left: auto; margin-right: 0px;" (input)="onKaeSearchInputChange($event)"
+            class="form-control search-input" id="searchInput" placeholder="Αναζήτηση" />
+        </div>
+        <div class="table-container">
+          <table id="region-kae-table" class="table table-hover table-striped align-middle overflow-hidden">
+            <thead class="table-primary">
+              <tr>
+                <th *ngIf="columnsKae.ada.visible" scope="col" (click)="sortTable('kae', columnsKae.ada.key)">
+                  {{columnsKae.ada.header}}</th>
+                <th *ngIf="columnsKae.region.visible" scope="col" (click)="sortTable('kae', columnsKae.region.key)">
+                  {{columnsKae.region.header}}</th>
+                <th *ngIf="columnsKae.kae.visible" scope="col" (click)="sortTable('kae', columnsKae.kae.key)">
+                  {{columnsKae.kae.header}}</th>
+                <th *ngIf="columnsKae.subject.visible" scope="col" (click)="sortTable('kae', columnsKae.subject.key)">
+                  {{columnsKae.subject.header}}</th>
+                <th *ngIf="columnsKae.pdf_url.visible" scope="col" (click)="sortTable('kae', columnsKae.pdf_url.key)">
+                  {{columnsKae.pdf_url.header}}</th>
+                <th *ngIf="columnsKae.signer.visible" scope="col" (click)="sortTable('kae', columnsKae.signer.key)">
+                  {{columnsKae.signer.header}}</th>
+                <th *ngIf="columnsKae.publish_date.visible" scope="col"
+                  (click)="sortTable('kae', columnsKae.publish_date.key)">{{columnsKae.publish_date.header}}</th>
+                <th *ngIf="columnsKae.amount.visible" scope="col" (click)="sortTable('kae', columnsKae.amount.key)">
+                  {{columnsKae.amount.header}} (&#8364;)</th>
+                <th *ngIf="columnsKae.suspicious.visible" scope="col"
+                  (click)="sortTable('kae', columnsKae.suspicious.key)" class="text-center">
+                  {{columnsKae.suspicious.header}}
+                </th>
+                <th scope="col" class="column-min-width">Ενέργεια</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let item of expensesPerKaeFiltered | paginate: {id: 'pagination-kae', itemsPerPage: itemsPerPageKae, currentPage: currentPageKae}; let i = index;">
+                <td *ngIf="columnsKae.ada.visible" data-toggle="tooltip" title={{item.ada}}>{{item.ada}}</td>
+                <td *ngIf="columnsKae.region.visible" data-toggle="tooltip" title={{item.region}}>{{item.region}}</td>
+                <td *ngIf="columnsKae.kae.visible" data-toggle="tooltip" title={{item.kae}}>{{item.kae}}</td>
+                <td *ngIf="columnsKae.subject.visible" data-toggle="tooltip" title={{item.subject}}>{{item.subject}}
+                </td>
+                <td *ngIf="columnsKae.pdf_url.visible" data-toggle="tooltip" title={{item.pdf_url}}>{{item.pdf_url}}
+                </td>
+                <td *ngIf="columnsKae.signer.visible" data-toggle="tooltip" title={{item.signer}}>
+                  {{item.signer}}</td>
+                <td *ngIf="columnsKae.publish_date.visible" data-toggle="tooltip" title={{item.publish_date}}>
+                  {{item.publish_date}}</td>
+                <td *ngIf="columnsKae.amount.visible" data-toggle="tooltip" title={{item.amount}}>
+                  <ng-container *ngIf="item.amount; else noAmount">€ {{item.amount | number:'1.2-2'}}</ng-container>
+                  <ng-template #noAmount></ng-template>
+                </td>
+                <td *ngIf="columnsKae.suspicious.visible" data-toggle="tooltip"
+                  [title]="item.suspicious == 1 ? 'Αμφισβητήσιμα δεδομένα!' : 'Αξιόπιστα δεδομένα'" class="text-center">
+                  <img *ngIf="item.suspicious == 0" src="../../../../assets/icons/normal-lg.svg" class="me-1">
+                  <img *ngIf="item.suspicious == 1" src="../../../../assets/icons/suspicious-lg.svg" class="me-1">
+                </td>
+                <td class="column-min-width">
+                  <button class="btn btn-primary btn-table-alt2 me-2" (click)="onViewDetailsButtonClick(item.ada)"
+                    data-toggle="tooltip" title="Δείτε αναλυτικά">
+                    <img class="svg-icon" src="../../assets/icons/eye-fill.svg">
+                  </button>
+                  <button *ngIf="isAuthenticated()" class="btn btn-success btn-table-alt right-edge-btn me-2"
+                    (click)="onAddToPersonalList(item.ada)" data-toggle="tooltip" title="Προσθήκη σε προσωπική λίστα">
+                    <img class="svg-icon" src="../../assets/icons/add-lg.svg">
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id="main-alert" class="alert custom-alert rounded" role="alert"></div>
+  </div>
+  <div *ngIf="isLoading()" class="overlay spinner-container">
+    <div class="spinner"></div>
+    <br>
+    <h5 class="text-center mt-2 ms-3">Loading Data...</h5>
+  </div>
+</div>

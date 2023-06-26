@@ -1,0 +1,10 @@
+- Split thematic categories
+
+- Split KAE
+
+- Handle missing information
+    - Probably skip entries with an empty amount field
+
+- Remove brackets from signer
+
+- Populate date table 

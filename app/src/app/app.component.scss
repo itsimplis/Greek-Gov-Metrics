@@ -1,0 +1,7 @@
+.content-wrapper {
+    max-height: calc(100vh - 75px); 
+    padding-top: 30px;
+    padding-bottom: 30px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}

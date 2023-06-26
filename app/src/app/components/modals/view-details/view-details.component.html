@@ -1,0 +1,90 @@
+<!-- Header -->
+<div id="modal">
+  <div #modal class="modal-header">
+    <h5 class="modal-title" id="financialActModalLabel" ngbAutofocus>Αναλυτικές Πληροφορίες Πράξης</h5>
+    <button id="close-button" type="button" class="btn-close" aria-label="Close"
+      (click)="activeModal.dismiss('Cross click')"></button>
+  </div>
+
+  <!-- Body -->
+  <div class="modal-body">
+    <div class="row mt-1">
+      <div class="col-sm"><strong>ΚΩΔΙΚΟΣ ΑΝΑΡΤΗΣΗΣ </strong><br>{{modalData[0].ada}}</div>
+      <div class="col-sm"><strong>ΑΡΙΘΜΟΣ ΠΡΩΤΟΚΟΛΛΟΥ </strong><br>{{modalData[0].protocol_number}}</div>
+      <div class="col-sm"><strong>ΗΜΕΡ/ΝΙΑ ΑΝΑΡΤΗΣΗΣ </strong><br>{{modalData[0].publish_date}}</div>
+      <div class="col-sm"><strong>ΚΑΤΑΣΤΑΣΗ ΠΡΑΞΗΣ</strong><br><span
+          [ngClass]="{'status-color-green': modalData[0].status == 'PUBLISHED', 'status-color-red': modalData[0].status != 'PUBLISHED'}"
+          [innerHTML]="translateStatus()"></span>
+      </div>
+    </div>
+    <hr>
+    <div class="container-border-rounded">
+      <div class="row">
+        <div class="col">
+          <strong>ΘΕΜΑ: </strong>{{modalData[0].subject}}
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="row mt-2">
+      <div class="col"><strong>ΔΗΜΟΣ/ΠΕΡΙΦΕΡΕΙΑ </strong><br>{{modalData[0].organization}}</div>
+      <div class="col"><strong>ΤΥΠΟΣ ΠΡΑΞΗΣ </strong><br>{{modalData[0].decision_type}}</div>
+      <div *ngIf="modalData[0].thematic_category" class="col"><strong>ΘΕΜΑΤΙΚΗ ΚΑΤΗΓΟΡΙΑ
+        </strong><br>{{modalData[0].thematic_category}}</div>
+      <div *ngIf="modalData[0].kae" class="col"><strong>ΚAE </strong><br>{{modalData[0].kae}} </div>
+    </div>
+    <hr>
+    <div class="row mt-2">
+      <div class="col"><strong>ΠΟΣΟ (&#8364;) </strong><br>
+        <ng-container *ngIf="modalData[0].amount; else noAmount">€ {{modalData[0].amount |
+          number:'1.2-2'}}</ng-container>
+        <ng-template #noAmount></ng-template>
+      </div>
+      <div class="col"><strong>ΥΠΟΓΡΑΦΩΝ </strong><br>{{modalData[0].signer}}</div>
+      <div class="col"><strong>ΑΞΙΟΠΙΣΤΙΑ ΔΕΔΟΜΕΝΩΝ</strong><br>
+        <div class="status-container">
+          <img *ngIf="modalData[0].suspicious == 0" src="../../../../assets/icons/normal.svg" class="me-1">
+          <img *ngIf="modalData[0].suspicious == 1" src="../../../../assets/icons/suspicious.svg" class="me-1">
+          <span
+          [ngClass]="{'status-color-green': modalData[0].suspicious == 0, 'status-color-red': modalData[0].suspicious == 1}"
+          [innerHTML]="translateSuspicious()"></span>
+        </div>
+
+      </div>
+    </div>
+    <div *ngIf="this.note && this.note.length > 0">
+      <hr>
+      <div class="container-border-rounded-note">
+        <div class="row">
+          <div class="col">
+            <strong>ΣΗΜΕΙΩΣΗ ({{note[0].username}}): </strong>{{note[0].note}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-5">
+      <div class="d-flex flex-row">
+        <button class="btn btn-primary me-3" [disabled]="!hasPdfUrl()"
+          (click)="onOpenPdfButtonClick(modalData[0].pdf_url)">
+          <img class="me-2" src="../../assets/icons/pdf.svg" alt="Αρχείο PDF">
+          Προβολή Εγγράφου</button>
+        <button class="btn btn-primary me-3" (click)="onMetaDataButtonClick(modalData[0].ada)">
+          <img class="me-2" src="../../assets/icons/metadata.svg" alt="Μεταδεδομένα (.json)">
+          Προβολή Μεταδεδομένων</button>
+      </div>
+    </div>
+  </div>
+  <!-- Footer -->
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="activeModal.dismiss('Close click')">Κλείσιμο</button>
+    <div class="dropdown">
+      <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true"
+        aria-expanded="false">Αποθήκευση ως</button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" (click)="saveAsImage()">Είκονα (.png)</a>
+        <a class="dropdown-item">Κείμενο (.csv)</a>
+        <a class="dropdown-item">Φύλλο (.xls)</a>
+      </div>
+    </div>
+  </div>
+</div>

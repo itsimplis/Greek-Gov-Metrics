@@ -1,0 +1,81 @@
+<nav class="navbar navbar-expand-xl py-3 bg-light ms-0 me-0">
+  <a class="navbar-brand ms-2" routerLink="/home-page">
+    <img class="img-fluid me-1" src="../../../assets/icons/icon-euro-blue.png" alt="" width="48px" height="48px"
+      routerLink="/home-page" type="button" />
+    Greek Gov Metrics</a>
+  <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#myNavbar4"
+    aria-controls="myNavbar4" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+
+  <div class="lc-block collapse navbar-collapse ms-3" id="myNavbar4">
+    <div lc-helper="shortcode" class="live-shortcode ms-auto">
+      <ul id="menu-menu-1" class="navbar-nav me-auto mb-2 mb-md-0 navbar-nav">
+        <li class="menu-item menu-item-type-custom menu-item-object-custom nav-item nav-item-32739"><a
+            routerLink="/statistics" class="nav-link ">Στατιστικά</a></li>
+        <li class="menu-item menu-item-type-custom menu-item-object-custom nav-item nav-item-32739"><a
+            routerLink="/olmap" class="nav-link ">Χάρτης</a></li>
+        <li
+          class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children dropdown nav-item nav-item-33131">
+          <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">Αναζήτηση
+            Εξόδων</a>
+          <ul class="dropdown-menu custom-dropdown-menu">
+            <li>
+              <a class="dropdown-item" routerLink="/expenses-municipality">Ανα δήμο</a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/expenses-region">Ανα περιφέρεια</a>
+            </li>
+          </ul>
+        </li>
+        <li class="menu-item menu-item-type-custom menu-item-object-custom nav-item nav-item-32739"><a
+            routerLink="/info" class="nav-link ">Πληροφορίες</a></li>
+        <li class="menu-item menu-item-type-custom menu-item-object-custom nav-item nav-item-32739"><a
+            routerLink="/team-panel" class="nav-link ">Σχετικά με εμάς</a></li>
+      </ul>
+    </div>
+
+    <div lc-helper="shortcode" class="live-shortcode ms-auto">
+      <ul id="menu-secondary" class="navbar-nav mb-2 mb-md-0 me-2 navbar-nav">
+        <div><a class="btn btn-login me-2" *ngIf="!isAuthenticated()" (click)="onUserLogin()">Είσοδος</a><a
+            *ngIf="!isAuthenticated()" (click)="onUserRegistration() " class="btn btn-fancy">Εγγραφή</a></div>
+
+        <div *ngIf="isAuthenticated()" class="dropdown dropdown-button-auth me-1">
+          <button *ngIf="isAuthenticated()" title="Προσωπική λίστα" type="button"
+            class="btn btn-fancy btn-user-list nav-item dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            <img src="../../assets/icons/user-auth.svg" class="me-3" />
+            <p class="btn-username text-center"><strong>{{getUsername()}}</strong></p>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li *ngIf="isAuthenticated()" class="list-centered">
+              <a class="dropdown-item" routerLink="/personal-list">
+                <div class="list-centered">
+                  <img src="../../assets/icons/list.svg" alt="Logout Icon" class="icon-svg me-3" />
+                  <p class="vertical-center">Προσωπική λίστα</p>
+                </div>
+              </a>
+            </li>
+            <li *ngIf="isAuthenticated()" class="list-centered">
+              <a class="dropdown-item" routerLink="/notes">
+                <div class="list-centered">
+                  <img src="../../assets/icons/notepad.svg" alt="Logout Icon" class="icon-svg me-3" />
+                  <p class="vertical-center">Σημειώσεις</p>
+                </div>
+              </a>
+            </li>
+            <li *ngIf="isAuthenticated()" class="list-centered">
+              <a class="dropdown-item" routerLink="" (click)="onLogout()">
+                <div class="list-centered">
+                  <img src="../../assets/icons/logout.svg" alt="Logout Icon" class="icon-svg me-3" />
+                  <p class="vertical-center">Αποσύνδεση</p>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </ul>
+    </div>
+  </div>
+</nav>

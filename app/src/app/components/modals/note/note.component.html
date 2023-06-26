@@ -1,0 +1,44 @@
+<div id="modalNote" class="rounded">
+    <!-- Body -->
+    <div class="modal-body rounded">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-10">
+                    <div class="title-container mt-4 mb-4">
+                        <h3 class="modal-title text-center mb-2" id="financialActModalLabel" ngbAutofocus>
+                            <strong>Σημείωση</strong>
+                        </h3>
+                        <p class="subtitle text-center">Προσθέστε ή επεξεργαστείτε μια σημείωση</p>
+                    </div>
+                    <form #noteForm="ngForm" (ngSubmit)="saveNote(noteForm.value.note, noteForm.value.category)" class="needs-validation" novalidate>
+                        <div class="form-group mt-2 mb-4">
+                            <label class="mb-1" for="category">Σημασία</label>
+                            <div class="input-group mb-3">
+                                <select name="category" id="category" class="form-select form-control"
+                                    [(ngModel)]="modalData[0].note_tag" (ngModelChange)="onNoteCategoryChanged()" required>
+                                    <option value="">-- Επιλέξτε --</option>
+                                    <option value="1">Χαμηλή</option>
+                                    <option value="2">Μέτρια</option>
+                                    <option value="3">Υψηλή</option>
+                                </select>
+                            </div>
+                            <label class="mb-1" for="note">Σημείωση</label>
+                            <div class="input-group">
+                                <textarea type="text" name="note" rows="10" [value]="modalData[0].note || ''"
+                                    [(ngModel)]="modalData[0].note" required class="form-control right-input-field"
+                                    id="note" placeholder="Σημείωση" (ngModelChange)="onTextAreaChange()" required></textarea>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="text-center d-flex justify-content-center mt-2 mb-2">
+                            <button type="button" class="btn btn-danger"
+                                (click)="activeModal.dismiss('Close click')">Κλείσιμο</button>
+                            <button type="submit" class="btn btn-success ms-5"
+                                [disabled]="isSaveButtonDisabled">Αποθήκευση</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

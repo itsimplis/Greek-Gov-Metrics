@@ -1,0 +1,87 @@
+//FORM CSS
+
+.form-fancy {
+  background-color: #1d4f68 ; /* Darker shade of the complementary color */
+  border-radius: 10px 10px 0 0;
+  padding: 12px;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.card-text {
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+#map {
+  height: 800px;
+  // background-image: linear-gradient(to bottom right, #2c3e50, #4ca1af);
+}
+.card {
+  border-radius: 8px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #2f72b1;
+  border-color: #007bff;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:not(.active) {
+  color: #2f72b1;
+  background-color: #e3f3ff;
+  border-color: #007bff;
+}
+
+.btn-primary:not(.active):hover {
+  background-color: #d9e8ff;
+  border-color: #c9ddf3;
+  color: #2f72b1;
+}
+
+.btn-primary:focus, .btn-primary:active, .btn-primary.active {
+  color: #fff;
+  background-color: #2f72b1;
+  border-color: #005cbf;
+}
+
+.btn-lg {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  border-radius: 1.5rem;
+  padding: 0.75rem 1.5rem;
+}
+
+.rounded-pill {
+  border-radius: 50rem;
+}
+
+
+//color for tabs
+.custom-tab {
+  background-color: #5a5b5d;
+  color: #fff;
+  border-radius: 20px;
+  padding: 10px 20px;
+}
+
+.custom-tab.active {
+  background-color: #2f72b1;
+}
+
+.font-fam {
+  font-family: Georgia, 'Times New Roman', Times, serif
+}

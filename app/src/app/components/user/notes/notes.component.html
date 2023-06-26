@@ -1,0 +1,72 @@
+<div class="bg-light text-dark shadow mb-4">
+    <div class="card-header-note form-fancy-note text-white">
+        <h3 class="card-title-note text-center mb-0">
+            ΣΥΝΟΛΟ ΣΗΜΕΙΩΣΕΩΝ
+        </h3>
+    </div>
+    <div class="card-body-note">
+        <div class="card-text-container flex-grow-1">
+
+            <p class="card-text-note card-text-lg text-center mb-0">
+                Μπορείτε να δείτε όλες τις σημειώσεις που έχετε κρατήσει, χωρισμένες ανά σημαντικότητα.
+            </p>
+        </div>
+        <div class="button-container text-end">
+            <button class="btn btn-container" routerLink="/personal-list"><img src="../../../../assets/icons/switch.svg"
+                    class="me-3">Προσωπική λίστα πράξεων</button>
+        </div>
+    </div>
+</div>
+
+<!-- Tab Content -->
+<div class="tab-content" id="myTabContent">
+    <!-- Personal List -->
+    <div class="tab-pane fade show active" id="personalnotes" role="tabpanel" aria-labelledby="personal-notes-tab">
+
+        <!-- <h3 class="text-center mt-3 mb-3">Σύνολο σημειώσεων</h3> -->
+        <hr>
+        <div class="grid-container">
+            <div class="card bg-light mb-4 ms-2 me-2" *ngFor="let item of notes; let i = index">
+                <div class="card-header form-fancy text-white">
+                    <img src="../../../../assets/icons/doc.svg" alt="doc-svg" class="me-1" title="ΑΔΑ">
+                    <h6 class="card-title text-center mb-0"> {{item.ada}}</h6>
+                    <img class="svg-icon-right shadow-icon" [src]='getIconPath(item.note_tag)'
+                        [title]="getIconName(item.note_tag)">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <p class="card-text">{{ item.note }}</p>
+                </div>
+                <hr>
+                <div class="row mb-2">
+                    <div class="col-6 d-flex justify-content-around">
+                        <button class="btn btn-primary btn-view" title="Προβολή πράξης"
+                            (click)="onButtonViewDetailsClick(item.ada)">
+                            <img src="../../assets/icons/eye-fill.svg" class="me-2">
+                            <p class="vertical-center">Πράξη</p>
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex justify-content-evenly me-1">
+                            <button class="btn btn-primary btn-view" title="Επεξεργασία"
+                                (click)="onButtonEditClick(item.username, item.ada)">
+                                <img class="svg-icon" src="../../assets/icons/edit.svg">
+                            </button>
+                            <button class="btn btn-danger btn-view" title="Διαγραφή"
+                                (click)="onButtonRemoveClick(item.username, item.ada)">
+                                <img class="svg-icon" src="../../assets/icons/trash.svg">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div id="main-alert" class="alert custom-alert rounded" role="alert"></div>
+    </div>
+    <div *ngIf="isLoading()" class="overlay spinner-container">
+        <div class="spinner"></div>
+        <br>
+        <h5 class="text-center mt-2 ms-3">Loading Data...</h5>
+    </div>
+</div>
